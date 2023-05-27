@@ -1,0 +1,348 @@
+<div class="wrapper">
+  <div class="header">
+    <div class="shop-title">
+      <img src="https://cdn.shopify.com/s/files/1/0753/6341/8394/files/LOGO_MIAS_MODA_Mesa_de_trabajo_1.png" alt="{{ store_name }} Logo" style="width: 200px; height: auto;">
+
+      <p class="to-uppercase subtitle-bold">
+        {{ shop.name }}
+      </p>
+      <p class="subtitle-bold">
+        Pedido {{ order.name }}
+      </p>
+    </div>
+  </div>
+  <div class="customer-addresses">
+    <div class="shipping-address">
+      <p class="subtitle-bold to-uppercase">
+        {% if delivery_method.instructions != blank %}
+          Entregar a
+        {% else %}
+          Enviar a
+        {% endif %}
+      </p>
+      <p class="address-detail">
+        {% if shipping_address != blank %}
+          {{ shipping_address.name }}
+          {{ shipping_address.zip }}
+          <br>
+          {{ customer.email }}
+          {% if shipping_address.company != blank %}
+            <br>
+            {{ shipping_address.company }}
+          {% endif %}
+          <br>
+          {{ shipping_address.address1 }}
+          {% if shipping_address.address2 != blank %}
+            <br>
+            {{ shipping_address.address2 }}
+          {% endif %}
+          {% if shipping_address.city_province_zip != blank %}
+            <br>
+            {{ shipping_address.city }}, 
+            {{ shipping_address.province_code }}
+          {% endif %}
+          , {{ shipping_address.country }}
+          {% if shipping_address.phone != blank %}
+            <br>
+            Teléfono: {{ shipping_address.phone }}
+          {% endif %}
+          
+        {% else %}
+          Sin dirección de envío
+        {% endif %}
+      </p>
+    </div>
+    
+  </div>
+  <hr>
+  <div class="order-container">
+    <div class="order-container-header">
+      <div class="order-container-header-left-content">
+        <p class="subtitle-bold to-uppercase">
+          Artículos
+        </p>
+      </div>
+      <div class="order-container-header-right-content">
+        <p class="subtitle-bold to-uppercase">
+          Cantidad
+        </p>
+      </div>
+    </div>
+
+
+    {% for line_item in line_items_in_shipment %}
+      <div class="flex-line-item">
+        <div class="flex-line-item-description">
+          <p>
+            <span class="line-item-description-line">
+              {{ line_item.title }} -
+              {% if line_item.variant_title != blank %}
+                  {{ line_item.variant_title }}
+              {% endif %} 
+            </span>
+            {% if line_item.sku != blank %}
+              <span class="line-item-description-line">
+                {{ line_item.sku }}
+              </span>
+            {% endif %}
+          </p>
+        </div>
+        <div class="flex-line-item-quantity">
+          <p class="text-align-right">
+            {{ line_item.shipping_quantity }} of {{ line_item.quantity }}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% unless includes_all_line_items_in_order %}
+    <hr class="subdued-separator">
+    <p class="missing-line-items-text ">
+      Hay otros artículos de tu pedido que no están incluidos en este envío.
+    </p>
+  {% endunless %}
+  <hr>
+  {% if order.note != blank %}
+    <div class="notes">
+      <p class="subtitle-bold to-uppercase">
+        Notas
+      </p>
+      <p class="notes-details">
+        {{ order.note }}
+      </p>
+    </div>
+  {% endif %}
+  {% if delivery_method.instructions != blank %}
+    <div class="notes">
+      <p class="subtitle-bold to-uppercase">
+        Instrucciones de entrega
+      </p>
+      <p class="notes-details">
+        {{ delivery_method.instructions }}
+      </p>
+    </div>
+  {% endif %}
+  <div class="footer">
+    <p>
+      ¡Gracias por comprar en <strong>{{ shop.name }}</strong>!
+      <br>
+      {{ shop.email }}
+      <br>@miasmoda.cl
+      <br>@mias.moda
+      <br>{{ shop.domain }}
+      <br>Santiago, Chile
+    </p>
+  </div>
+</div>
+<style type="text/css">
+  body {
+    font-size: 15px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .wrapper {
+    width: 415px;
+    margin: auto;
+    padding: 4em;
+    font-family: "Noto Sans", sans-serif;
+    font-weight: 250;
+  }
+
+  .header {
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    align-items: top;
+  }
+
+  .header p {
+    margin: 0;
+  }
+
+  .shop-title {
+    -webkit-box-flex: 6;
+    -webkit-flex: 6;
+    flex: 6;
+    font-size: 1.9em;
+  }
+
+  .order-title {
+    -webkit-box-flex: 4;
+    -webkit-flex: 4;
+    flex: 4;
+  }
+
+  .customer-addresses {
+    width: 100%;
+    display: inline-block;
+    margin: 2em 0;
+  }
+
+  .address-detail {
+    margin: 0.7em 0 0;
+    line-height: 1.5;
+  }
+
+  .subtitle-bold {
+    font-weight: bold;
+    margin: 0;
+    font-size: 0.85em;
+  }
+
+  .to-uppercase {
+    text-transform: uppercase;
+  }
+
+  .text-align-right {
+    text-align: right;
+  }
+
+  .shipping-address {
+    float: left;
+    min-width: 18em;
+    max-width: 50%;
+  }
+
+  .billing-address {
+    padding-left: 20em;
+    min-width: 18em;
+  }
+
+  .order-container {
+    padding: 0 0.7em;
+  }
+
+  .order-container-header {
+    display: inline-block;
+    width: 100%;
+    margin-top: 1.4em;
+  }
+
+  .order-container-header-left-content {
+    float: left;
+  }
+
+  .order-container-header-right-content {
+    float: right;
+  }
+
+  .flex-line-item {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 1.4em 0;
+    page-break-inside: avoid;
+  }
+
+  .flex-line-item-img {
+    margin-right: 1.4em;
+    min-width: {{ desired_image_size }}px;
+  }
+
+  .flex-line-item-description {
+    -webkit-box-flex: 7;
+    -webkit-flex: 7;
+    flex: 7;
+  }
+
+  .line-item-description-line {
+    display: block;
+  }
+
+  .flex-line-item-description p {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .flex-line-item-quantity {
+    -webkit-box-flex: 3;
+    -webkit-flex: 3;
+    flex: 3;
+  }
+
+  .subdued-separator {
+    height: 0.07em;
+    border: none;
+    color: lightgray;
+    background-color: lightgray;
+    margin: 0;
+  }
+
+  .missing-line-items-text {
+    margin: 1.4em 0;
+    padding: 0 0.7em;
+  }
+
+  .notes {
+    margin-top: 2em;
+  }
+
+  .notes p {
+    margin-bottom: 0;
+  }
+
+  .notes .notes-details {
+    margin-top: 0.7em;
+  }
+
+  .footer {
+    margin-top: 2em;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .footer p {
+    margin: 0;
+    margin-bottom: 1.4em;
+  }
+
+  hr {
+    height: 0.14em;
+    border: none;
+    color: black;
+    background-color: black;
+    margin: 0;
+  }
+
+  .aspect-ratio {
+    position: relative;
+    display: block;
+    background: #fafbfc;
+    padding: 0;
+  }
+
+  .aspect-ratio::before {
+    z-index: 1;
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 1px solid rgba(195,207,216,0.3);
+  }
+
+  .aspect-ratio--square {
+    width: 100%;
+    padding-bottom: 100%;
+  }
+
+  .aspect-ratio__content {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+</style>
